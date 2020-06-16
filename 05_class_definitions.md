@@ -65,7 +65,7 @@ By changing the current class, class_eval effectively reopens the class, just li
 
 ### Class Instance Variables
 
-In a class definition, the role of self belongs to the class itself, so the class instance variable `@my_var` belongs to the class rather than instances of this class:
+In a class definition, the role of _self_ belongs to the class itself, so the class instance variable `@my_var` belongs to the class rather than instances of this class:
 
 ```ruby
 class MyClass
@@ -86,7 +86,114 @@ MyClass.read       # => 1
 
 In this example, we have two instance variables called `@my_var`, but they belong to different objects.  One belongs to instance of MyClass, and the other belogns to the class itself.  Remember classes are just objects.
 
+#### Example of using class_eval() and class instance variables for testing
+
+```ruby
+class Loan
+  def initialize(book)
+    @book = book
+    @time = Time.now
+  end
+
+  def to_s
+    "#{@book.upcase} loaned on #{@time}"
+  end
+end
+```
+
+How do you write unit test for `#to_s` method?  The time will always change dependeding on when the book was loaned...
+
+```ruby
+class Loan
+  def initialize(book)
+    @book = book
+    @time = Loan.time_class.now 
+  end
+
+  def self.time_class
+    @time_class || Time
+  end
+
+  def to_s
+    # ...
+end
+```
+
+_Loan.time_class_ returns a class, and _Loan#initialize_ uses that class to get the current time. The class is stored in a Class Instance Variable named `@time_class`.
+
+In production, `Loan` always uses the `Time` class, but for testing we can do:
+
+```ruby
+class FakeTime
+  def self.now
+    'Tue Jun 16 12:15:50'
+  end
+end
+
+require 'test/unit'
+
+class TestLoan < Test::Unit::TestCase
+  def test_converstion_to_string
+    Loan.instance_eval { @time_class = FakeTime  }
+    loan = Loan.new('War and Peace')
+    assert_equal 'WAR AND PEACE loaned on Tue Jun 16 12:15:50', loan.to_s
+  end
+end
+```
 
 
+### Singleton Methods
+
+Ruby allows you to add a method to a single object.
+
+```ruby
+str = 'just a test string'
+
+def str.title?
+  self.upcase == self
+end
+
+str.title?                 # => false
+str.methods.grep(/title?/) # => [:title?]
+str.singleton_methods      # => [:title?]
+```
+
+You can also define a singleton method using _Object#define_singleton_method_ method.
+
+#### The Truth About Class Methods
+
+Classes are just objects, and class names are just constants.
+
+Class methods are really just singleton methods of a class.
+
+### Class Macros
+
+#### The attr_accessor() example
+
+```ruby
+class MyClass
+  def my_attribute=(value)
+    @my_attribute = value
+  end
+
+  def my_attribute
+    @my_attribute
+  end
+end
+
+obj = MyClass.new
+obj.my_attribute = 'x'
+obj.my_attribute       # => 'x'
+```
+
+Writing accessors like this can get tedious.  As an alternative, you can use _Module#attr_*_ methods:
+
+```ruby
+class MyClass
+  attr_accessor :my_attribute
+end
+```
+
+Class Macros look like keywords, but they're just regular class methods that are meant to be used in a class definition.
 
 
