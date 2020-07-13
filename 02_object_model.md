@@ -2,7 +2,7 @@
 
 ## Open Classes
 
-Can open standard library classes such as  String and add methods:
+In ruby, you can  open standard library classes such as  String and add methods:
 
 ```ruby
 class String
@@ -14,7 +14,7 @@ end
 
 ### Inside Class Definitions
 
-No real distniction between code that defines class and any other code. This code doesn't create three classes; it just opens the class definition.
+There is no real distniction between code that defines class and any other code. This code doesn't create three classes; it just opens the class definition three times:
 
 ```ruby
 3.times do
@@ -50,7 +50,7 @@ obj.y       # => "y"
 
 ### The Money Example
 
-money gem add set of utilitiy classes for managing money. It allows you to call `Numeric#to_money`:
+The _Money_ gem adds a set of utilitiy classes for managing money. It allows you to call `Numeric#to_money`:
 
 ```ruby
 require "money"
@@ -69,7 +69,7 @@ class Numeric
 end
 ```
 
-### The problem with Open Classes
+### The Problem with Open Classes
 
 Programmers can override original methods for a given class. This can lead to ugly side effects and bugs that are hard to track down.
 
@@ -78,7 +78,7 @@ Openning classes and modifying them is also referred to as "monkey patching".
 
 ## Inside the Object Model
 
-Instance variables live in objects; methods live in classes.
+**Instance variables live in objects; methods live in classes.**
 
 Said differently, instance variables are not shared among objects; however, an object is an instance of a class and shares the same methods.
 
@@ -129,7 +129,7 @@ Class.class       # => Class
 Class.superclass  # => Module
 ```
 
-Every Class is an instance of Module. More specifically, a class is a module with additional instance methods: new, allocate, and superclass that allow you to create objects or arrange hierarchies.
+Every Class is an instance of Module. More specifically, a class is a module with additional instance methods: _new_, _allocate_, and _superclass_ that allow you to create objects or arrange hierarchies.
 
 ### Constants
 
@@ -154,9 +154,9 @@ M::C::X  # => 'a constant'
 
 ## Usinig Namespaces
 
-When defining classes with common names, there's possibility of those classes classing with classes from different libraries.
+When defining classes with common names, there's possibility of those classes clashing with classes from different libraries.
 
-For example, the original _Rake_ library defined classes _Task_ and _FileTask_. To prevent possible name classes, they wrapper theses classes in modules:
+For example, the original _Rake_ library defined classes _Task_ and _FileTask_. To prevent possible name collisions, they wrapped theses classes in modules:
 
 ```ruby
 module Rake
@@ -172,9 +172,9 @@ Now full name of task is _Rake::Task_. A module that exists to be container of c
 2. Executes method.  Needs something called _self_
 
 ### Method Lookup
-**Receiver** is object you call a method on.  Example: `"test".reverse()`  `"test"` is the receiver.
+**Receiver** is an object you call a method on.  Example: `"test".reverse()`.  `"test"` is the receiver.
 
-**Ancestor Chain** is chain of classes going from receiver's class to its superclass, and then to it's superclass's superclass.
+**Ancestor Chain** is a chain of classes going from receiver's class to its superclass, and then to it's superclass's superclass.
 
 ```ruby
 t = "test"
