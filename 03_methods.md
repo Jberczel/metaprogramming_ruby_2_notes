@@ -6,7 +6,7 @@ Ruby allows you to call and define methods at runtime, which removes repetitive 
 
 ### Calling Methods Dynamically
 
-Normally yo do this:
+Normally you do this:
 
 ```ruby
 class MyClass
@@ -89,7 +89,7 @@ Overriding method_missing allows you to call methods that don't exist (Ghost Met
 
 ```ruby
 class Lawyer
-  def method_misisng(method, *args)
+  def method_missing(method, *args)
     puts "You called: #{member}(#{args.join(', ')})"
     puts "You also passed it a block" if block_given?
   end
@@ -108,7 +108,7 @@ You also passed it a block
 
 ### The Hashie Example
 
-**Todo**
+**TODO**
 
 ### Dynamic Proxies
 
@@ -135,7 +135,7 @@ end
 
 What happens if you call _Computer#mouse_?  Call gets routed to _method_missing_, which checks if wrapped data source has a _get_mouse_info_ method. If it doesn't, call falls back to BasicObject#method_missing.
 
-If the wrapped data source knwos about it, the call gets forwarded.
+If the wrapped data source knows about it, the call gets forwarded.
 
 **TODO** Add note about `respond_to?` not recognizing ghost methods.
 
@@ -152,7 +152,7 @@ im  = BasicObject.instance_methods
 im # => [:==, :equal?, :!, :!=, :instance_eval, :instance_exec, :__send__, :__id__]
 ```
 
-By default, Ruby objects in herit from _Object_ (which is itself a subclass of _BasicObject_).  Inheriting from _BasicObject_ is the quicker way to define a Blank Slate in Ruby.
+By default, Ruby objects inherit from _Object_ (which is itself a subclass of _BasicObject_).  Inheriting from _BasicObject_ is the quicker way to define a Blank Slate in Ruby.
 
 ```ruby
 class Computer < BasicObject
