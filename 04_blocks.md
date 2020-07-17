@@ -81,7 +81,7 @@ MyClass.new do
 end
 ```
 
-Similarly, we can use _Kernel#defin_method_ and pass it a closure/block to print `my_var` inside my_method call.
+Similarly, we can use _Kernel#define_method_ and pass it a closure/block to print `my_var` inside my_method call.
 
 ```ruby
   define_method :my_method do
@@ -103,6 +103,8 @@ def define_methods
     shared += x
   end
 end
+
+define_methods
 
 counter # => 0
 inc(4)
@@ -133,7 +135,7 @@ ob.instance_eval do
 end
 ```
 
-You can acess local variables via flat scope:
+You can access local variables via flat scope:
 
 ```ruby
 v = 2
