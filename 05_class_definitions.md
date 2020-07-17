@@ -84,7 +84,7 @@ MyClass.read       # => 1
 
 ```
 
-In this example, we have two instance variables called `@my_var`, but they belong to different objects.  One belongs to instance of MyClass, and the other belogns to the class itself.  Remember classes are just objects.
+In this example, we have two instance variables called `@my_var`, but they belong to different objects.  One belongs to instance of MyClass, and the other belongs to the class itself.  Remember classes are just objects.
 
 #### Example of using class_eval() and class instance variables for testing
 
@@ -218,7 +218,7 @@ deprecate :title2, :subtitle
 
 Objects can have their own hidden, special class, sometimes referred to as _metaclass_ or _eigenclass_.
 
-Ruby has a speicla syntax based on the _class_ keyword that places you in the scope of the singleton class:
+Ruby has a special syntax based on the _class_ keyword that places you in the scope of the singleton class:
 
 ```ruby
 class << an_object
