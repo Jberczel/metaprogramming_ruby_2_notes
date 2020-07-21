@@ -14,3 +14,4 @@ I highly recommend you pick up a copy and work through it as well.
 3. [Tuesday: Methods](https://github.com/Jberczel/metaprogramming_ruby_2_notes/blob/master/03_methods.md)
 4. [Wednesday: Blocks](https://github.com/Jberczel/metaprogramming_ruby_2_notes/blob/master/04_blocks.md)
 5. [Thursday: Class Definitions]( https://github.com/Jberczel/metaprogramming_ruby_2_notes/blob/master/05_class_definitions.md)
+6. [Friday: Code that Writes Code](https://github.com/Jberczel/metaprogramming_ruby_2_notes/blob/master/06_code_that_writes_code.md)
