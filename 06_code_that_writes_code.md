@@ -28,6 +28,69 @@ me.age = 17 # => Exception
 
 ### Kernel#eval
 
+`Kernel#eval` takes a string that contains Ruby code and executes it.
+
+```ruby
+array = [1, 2]
+element = 3
+
+eval("array << element") # => [1, 2, 3]
+
+```
+
+When would this be helpful?  Let's look at an example below.
+
+#### The REST Client Example
+
+REST Client is a simple HTTP client library that comes with an intepreter:
+
+```bash
+$ restclient http://www.twitter.com
+
+> html_first_chars = get("/")[0..14]
+=> "<!DOCTYPE html>"
+
+```
+
+If we look at the gem's source code, we have top-level methods for HTTP Methods, which delegate to a Resource class:
+
+```ruby
+
+module RestClient
+  class Resource
+    def get(additional_headers={}, &block) # ...
+    def post(payload, additional_heaers={}, &block) # ...
+
+  ...
+```
+
+You'd expect the top-level GET method to look somethign like this:
+
+```ruby
+def get(path, *args, &b)
+  r[path].get(*args, &b)
+end
+
+```
+
+However, the GET method along with other HTTP methods are defined in one go:
+
+```ruby
+POSSIBLE_VERBS = ['get', 'put', 'post', 'delete']
+
+POSSIBLE_VERBS.each do |verb|
+  eval <<-end_eval
+    def #{verb}(path, *args, &b)
+      r[path].#{verb}(*args, &b)
+    end
+  end_eval
+end
+
+```
+
+
+
+
 
 
 
