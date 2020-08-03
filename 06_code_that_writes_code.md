@@ -88,6 +88,42 @@ end
 
 ```
 
+### Binding Objects
+
+A _Binding_ is a whole scope packaged as an object that you can carry around.  Later, you can execute code in that scope using _eval_.
+
+```ruby
+class MyClass
+  def my_method
+    @x = 1
+    binding
+  end
+end
+
+b = MyClass.new.my_method
+
+eval "@x", b # => 1
+```
+
+Ruby provides a predefined constant called TOPLEVEL_BINDING, which is just a binidng for the top-level scope:
+
+```ruby
+
+class AnotherMethod
+  def my_method
+    eval "self", TOPLEVEL_BINDING
+  end
+end
+
+AnotherClass.new_my_method # => main
+
+```
+
+One gem that makes good use of _bindings_ is Pry.  Pry defines an `Object#pry` method that opens an interactive session inside the object's scope.
+
+### The irb Example
+
+
 
 
 
