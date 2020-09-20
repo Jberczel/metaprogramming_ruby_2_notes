@@ -98,3 +98,73 @@ When Ruby calls _SecondLevelModule#included_, the base parameter is not _BaseCla
 
 ## ActiveSupport::Concern
 
+```ruby
+require 'active_support'
+
+module MyConcern
+  extend ActiveSupport::Concern
+
+  def an_instance_method; 'an instance method'; end
+
+  module ClassMethods
+    def a_class_method; 'a class method'; end
+  end
+end
+
+MyClass.new.an_instance_method # => 'an instance method'
+MyClass.a_class_method         # => 'a class method'
+```
+
+### A Look at Concern's Source Code
+
+Two important methods: `extended` and `append_features`. Here is `extended`:
+
+```ruby
+module ActiveSupport
+  module Concern
+    class MultipleIncludedBlocks < StandardError
+      def initialize
+        super "Cannot define multiple 'included' blocks for a Concern"
+      end
+    end
+
+    def self.extended(base)
+      base.instance_variable_set(:@_dependencies, [])
+    end
+
+    # ...
+```
+
+When a module extends _Concern_, it class the extended Hook Method, and defines an `@_dependencies` (initialized to an empty array) class instance variable on the includer.
+
+#### Module#apppend_features
+
+This is a core Ruby method that gets called whenever you _include_ a module (similar behaivor to module#included). However, there is a big difference between the two:
+
+`included` is a Hook method that is normally empty and exists to be overwritten.
+
+`append_features` is not empty and checks whether the included module is already in the includer's chain of ancestors, and if not, adds it.
+
+If you override `append_features`, you can get some surprising results.  For example,
+
+```ruby
+module M
+  def self.append_features(base); end
+end
+
+Class C
+  include M
+end
+
+# No module M in the ancestor chain
+C.ancestors # => [C, Object, Kernel, BasicObject]
+```
+
+#### Concern#append_features
+
+_Concern#append_features_ overrides _Module#append_features_. `append_features` is an instance method on _Concern_, so it becomes a class method on modules that extend _Concern_.
+
+For example, if a module _Validations_ extends _Concern_, then it gains a _Validation.append_features_ class method.
+
+
+#### Inside Concern#append_features
