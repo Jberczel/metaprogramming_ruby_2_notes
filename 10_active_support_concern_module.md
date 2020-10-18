@@ -5,13 +5,13 @@ _ActiveSupport::Concern_ allows you to add both and makes it easy to roll that f
 
 ## Rails Before Concern
 
-_ActiveRecord::Base_ is an assembly of dozens of modules that defien both instance methods and class methods.
+_ActiveRecord::Base_ is an assembly of dozens of modules that define both instance methods and class methods.
 
 Before _ActiveSupport::Concern_ there was another way to roll those methods into _Base_.
 
 ## The Include-and-Extend Trick
 
-In Rails 2, all validaiton methods were defined in _ActiveRecord::Validations_ (there was no Active Model at this time).
+In Rails 2, all validation methods were defined in _ActiveRecord::Validations_ (there was no Active Model at this time).
 
 ```ruby
 module ActiveRecord
@@ -87,7 +87,7 @@ BaseClass.new.first_level_instance_method   # => 'ok'
 BaseClass.new.second_level_instance_method  # => 'ok'
 ```
 
-For teh class methods, however:
+For the class methods, however:
 
 ```ruby
 BaseClass.first_level_instance_method    # => 'ok'
@@ -135,7 +135,7 @@ module ActiveSupport
     # ...
 ```
 
-When a module extends _Concern_, it class the extended Hook Method, and defines an `@_dependencies` (initialized to an empty array) class instance variable on the includer.
+When a module extends _Concern_, it calls the extended Hook Method, and defines an `@_dependencies` (initialized to an empty array) class instance variable on the includer.
 
 #### Module#apppend_features
 
@@ -168,3 +168,14 @@ For example, if a module _Validations_ extends _Concern_, then it gains a _Valid
 
 
 #### Inside Concern#append_features
+
+TODO
+
+#### Concern Wrap-Up
+
+_ActiveSupport::Concern_ is a minimalistic dependency management system wrapped into a single module with just a few lines of code.
+
+The code is complex, but using _Concern_ is easy.
+
+Is it too clever?  That depends on who you ask. There are many success stories using metaprogramming, but there is a dark side to it as well.
+
