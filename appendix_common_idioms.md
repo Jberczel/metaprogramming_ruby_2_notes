@@ -130,8 +130,55 @@ This simple idiom is known as _Self Yield_.  They're pretty common in Ruby.
 
 ### The tap() Example
 
+It's common to see chained methods in Ruby.  In other languages, it's sometimes frowned upon (and sometimes referred to as "train wrecks").
+
+```ruby
+['a', 'b', 'c'].push('d').shift.upcase.next # => "B"
+```
+Due to Ruby's terse syntax, chains are generally more readable.  However, how do you track error somwhere along the chain?
+
+Normally, you could break the chain and add print intermediate results. Or, you can use `#tap`:
+
+```ruby
+['a', 'b', 'c'].push('d').shift.tap { |x| puts x }.upcase.next # => "B"
+```
+
+If you were to write your own `#tap` method:
+
+```ruby
+class Object
+  def tap
+    yield self
+    yield
+  end
+end
+```
 
 ## Symbol#to_proc()
 
-##
+```ruby
+names = ['bob', 'bill', 'heather']
+names.map { |name| name.capitalize } # => ["Bob", "Bill", "Heather"]
+```
 
+This is considered a "one-call block".  It takes a single argument and calls a single method.
+
+The idea behind _Symbol#to_proc_ is to repalce one-call blocks with a shorter construct.
+
+First, let's represent the method as a symbol:
+
+ `:capitalize`
+
+We want to conver that to a block:
+
+`{ |x| x.capitalize }`
+
+As a first step, we could do:
+
+```ruby
+class Symbol
+  def to_proc
+    Proc.new { |x| x.send(self) }
+  end
+end
+```
