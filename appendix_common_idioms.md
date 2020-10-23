@@ -1,3 +1,13 @@
+# Common Idioms
+
+## Mimic Methods
+
+Method calls in disguise. Depending on the Programmer's intention, you can utilize Ruby's flexible sytnax to make the code cleaner or to make a method call look like a keyword.
+
+In standard Ruby library, mimic methods are used for access modifiers such as `prviate` and `protected` as well as class macros such as `attr_reader`.
+
+One simple example of a mimic method:
+
 `puts("hello world")` is the same as `puts "hello world"`. 
 
 Another example using a setter:
@@ -23,6 +33,43 @@ obj.myattributed # => 'some value'
 In this case, `obj.my_attribute=('some value')` is the same as `obj.my_attribute = 'some value'`.
 
 Another example with integers: `1 + 1` is the same as `1.+(1)` in Ruby.
+
+### Attribute Trouble
+
+```ruby
+class MyClass
+  attr_accessor :my_attribute
+
+  def set_attribute(n)
+    my_attribute = n
+  end
+end
+
+obj = MyClass.new
+obj.set_attribute(100)
+obj.my_attribute # => nil
+```
+
+Why is my_attribute not getting set?  The code in `#set_attribute` is ambigious.  It could be a local variable or call to mimic method `#my_attribute=`.
+
+When in doubt, Ruby defaults to first option. To stear clear of this issue, use _self_ explicitly when you assign an attribute to current object:
+
+```ruby
+class MyClass
+  attr_accessor :my_attribute
+
+  def set_attribute(n)
+    self.my_attribute = n
+  end
+end
+
+obj = MyClass.new
+obj.set_attribute(100)
+obj.my_attribute # => 100
+```
+
+
+
 
 ## Nil Guards
 
@@ -181,4 +228,19 @@ class Symbol
     Proc.new { |x| x.send(self) }
   end
 end
+```
+If you call `#to_proc`, it returns a proc that takes an argument and calls _capitalize_ on the argument.
+
+Now, if you combine `#to_proc` and the _&_ operator to convert symbol to proc and then to a block:
+
+```ruby
+names = ['bob', 'bill', 'heather']
+names.map(&:capitalize.to_proc) # => ["Bob", "Bill", "Heather"]
+```
+
+You can make it even shorter, since you can apply _&_ operator to any object, and it will automatically convert object to proc.
+
+```ruby
+names = ['bob', 'bill', 'heather']
+names.map(&:capitalize)  # => ["Bob", "Bill", "Heather"]
 ```
