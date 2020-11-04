@@ -26,6 +26,8 @@ me.age = 17 # => Exception
 
 ```
 
+Let's take a look at things we'll need to setup this new class macro.
+
 ### Kernel#eval
 
 `Kernel#eval` takes a string that contains Ruby code and executes it.
@@ -123,9 +125,66 @@ One gem that makes good use of _bindings_ is Pry.  Pry defines an `Object#pry` m
 
 ### The irb Example
 
+irb is basically a program that parses standard input or file and passes each line to `eval`.
 
+Deep within irb's source code:
 
+```ruby
+eval(statements, @binding, file, line)
+```
 
+where
+- `statements` is just a line of Ruby code.
+- `@binding` is whole scope packaged into an object to evaluate code in different contexts
+- `file` and `line` are used to tweak stack trace in case of excpetions (see below)
+
+```ruby
+# this code raises an exception
+x = 1 / 0
+```
+
+If you run `irb exception.rb`, you'll get an exception on line 2:
+
+```bash
+ZeroDivisionError: divided by 0
+  from exception.rb2:in `/'
+```
+
+When irb calls `eval`, it calls it with the current filename and line number.  If you were to remove last two arguments:
+
+```ruby
+eval(statements, @binding) # , file, line)
+```
+
+You'd get something more like this:
+
+```bash
+ZeroDivisionError: divided by 0
+  from /Users/jimbob/.rvm/rubies/ruby-2.0.0/lib/ruby/2.0.0/irb/workspace.rb:54:in `/'
+```
+
+### Strings of Code vs Blocks
+
+`eval` evalutes a string of code instead of a block.  `instance_eval` and `class_eval` usually evaluate a block, but they can also evaluate a string of code:
+
+```ruby
+array = ['a', 'b', 'c']
+x = 'd'
+
+array.instance_eval "self[1] = x"
+
+array # => ['a', 'd', 'c']
+```
+
+You can evaluate string of code or block, but as a rule of thumb, you should use block.
+
+### The Trouble with eval()
+
+- Strings of code don't always play well with your editor's syntax coloring.
+- More difficult to read
+- Security issues (code injection)
+
+### The ERB Example
 
 
 
