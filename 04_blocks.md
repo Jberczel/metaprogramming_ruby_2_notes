@@ -139,7 +139,7 @@ You can access local variables via flat scope:
 
 ```ruby
 v = 2
-obj.instance_eval { @v = 2 }
+obj.instance_eval { @v = v }
 obj.instance_eval{ @v } # => 2
 ```
 
@@ -153,7 +153,7 @@ Don't these methods break encapsulation? Yes, and it comes with risks, but possi
 
 When you create an object to evaluate blocks inside it.
 
-The ideal Clean Room doesn't have many instance mehtods or instance variables, which makes _BasicObject_ good for setting up a Clean Room.
+The ideal Clean Room doesn't have many instance methods or instance variables, which makes _BasicObject_ good for setting up a Clean Room.
 
 ## Callable Objects
 
