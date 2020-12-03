@@ -30,7 +30,7 @@ Keep in mind that Classes and Modules are objects, so they can be _self_ in this
 
 ### The Current Class
 
-Wherever you are in a Ruby program, you alway have current object: self.  You will also have a current class (or module).  You will also have a current class (or module).
+Wherever you are in a Ruby program, you alway have current object: self.  You will also have a current class (or module). 
 
 In some situations, you need to know the current class.  For example:
 
@@ -377,7 +377,7 @@ using StringRefinement
 
 Like other Refinements, this Refinement wrapper applies only until the end of the module definition.
 
-This makes it generally safter than using "Around Alias" technique, which applies everywhere.
+This makes it generally safer than using "Around Alias" technique, which applies everywhere.
 
 
 ### Module#prepend
